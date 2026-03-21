@@ -1,0 +1,11 @@
+/* This will make the site "glitch" red when you hover over N.E.P.I. logos */
+.nepi-secret {
+    transition: 0.1s;
+}
+
+.nepi-secret:hover {
+    color: red !important;
+    text-shadow: 2px 2px #000;
+    font-family: 'Courier New', monospace;
+    content: 'NEURAL EXTRACTION';
+}
