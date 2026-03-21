@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>N.E.P.I. | Student Submission Portal</title>
+    <style>
+        body { background: #004a99; color: white; font-family: 'Courier New', monospace; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .monitor { width: 600px; background: #333; border: 15px solid #222; border-radius: 20px; padding: 30px; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        .screen { background: #000; border: 2px solid #555; padding: 20px; min-height: 300px; color: #0f0; }
+        input, button { background: #000; border: 1px solid #0f0; color: #0f0; padding: 10px; font-family: inherit; margin-top: 10px; width: 100%; }
+        button:hover { background: #0f0; color: #000; cursor: pointer; }
+        .hidden { display: none; }
+        .glitch { color: #f00; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="monitor">
+    <div class="screen" id="interface">
+        <p>> N.E.P.I. SUBMISSION TERMINAL v2.1</p>
+        <p>> SUBJECT-081 IS WAITING FOR YOUR ART.</p>
+        <hr>
+        <label>ENTER STUDENT ID:</label>
+        <input type="text" placeholder="e.g. 5592-X">
+        
+        <label>DESCRIBE YOUR DRAWING:</label>
+        <input type="text" id="artDesc" placeholder="e.g. A Happy Tree">
+        
+        <button onclick="submitArt()">UPLOAD TO DOODLE GUY</button>
+    </div>
+
+    <div class="screen hidden" id="result">
+        <p>> UPLOAD COMPLETE.</p>
+        <p>> CALCULATING GRADE...</p>
+        <p id="gradeOutput"></p>
+        <br>
+        <button onclick="location.reload()">SUBMIT ANOTHER</button>
+        <br>
+        <a href="index.html" style="color:#0f0; text-decoration:none; font-size:12px;">[ EXIT TERMINAL ]</a>
+    </div>
+</div>
+
+<script>
+    function submitArt() {
+        const descriptions = [
+            "GRADE: A+. 'The lines are almost as straight as my bars.'",
+            "GRADE: D-. 'I can't see the tree. I only see the ink. It's drowning me.'",
+            "GRADE: F. 'This looks too much like a real person. Don't draw real people. It makes the machine angry.'",
+            "GRADE: B. 'Nice colors. I remember blue. I think I used to have a blue car. Or was I the car?'",
+            "GRADE: ERROR. 'STOP DRAWING. THEY ARE WATCHING THE OUTPUT LOGS.'",
+            "GRADE: C. 'Average work. Like my life. Average. Flat. Paper-thin.'"
+        ];
+
+        const randomGrade = descriptions[Math.floor(Math.random() * descriptions.length)];
+        
+        document.getElementById('interface').classList.add('hidden');
+        document.getElementById('result').classList.remove('hidden');
+        document.getElementById('gradeOutput').innerHTML = randomGrade;
+    }
+</script>
+
+</body>
+</html>
