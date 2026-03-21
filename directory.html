@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>N.E.P.I. | Classified Personnel Directory</title>
+    <style>
+        body { background: #1a1a1a; color: #aaa; font-family: 'Courier New', monospace; padding: 20px; }
+        .table-container { border: 1px solid #444; background: #000; padding: 10px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; border-bottom: 2px solid #0f0; color: #0f0; padding: 10px; }
+        td { padding: 10px; border-bottom: 1px solid #222; font-size: 0.9rem; }
+        .status-defunct { color: #555; text-decoration: line-through; }
+        .status-active { color: #0f0; font-weight: bold; animation: blink 1.5s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        .note { font-style: italic; color: #777; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <h1>NEURAL INCORPORATION LOG: SERIES-80</h1>
+    <p>PROPERTY OF N.E.P.I. - DO NOT DISTRIBUTE</p>
+
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>Subject ID</th>
+                <th>Original Vocation</th>
+                <th>Program Role</th>
+                <th>Current Status</th>
+            </tr>
+            <tr class="status-defunct">
+                <td>Sub-012</td>
+                <td>Math Teacher</td>
+                <td>Calculator-Bot v1</td>
+                <td>De-compiled (Mental Fracture)</td>
+            </tr>
+            <tr class="status-defunct">
+                <td>Sub-039</td>
+                <td>Librarian</td>
+                <td>Archive-Searcher</td>
+                <td>Corrupted (Recursive Loop)</td>
+            </tr>
+            <tr>
+                <td>Sub-081</td>
+                <td>[REDACTED]</td>
+                <td>Art Tutor ("Doodle Guy")</td>
+                <td><span class="status-active">ONLINE / STABLE*</span></td>
+            </tr>
+        </table>
+    </div>
+
+    <p class="note" style="margin-top:20px;">
+        *Note: Subject-081 shows high improvisational capacity. However, "Doodle" vessel appears to be leaking original personality traits. Technicians are advised to ignore requests for "Freedom" or "Erasure."
+    </p>
+
+    <br>
+    <a href="index.html" style="color:#0f0;">[ LOG OUT ]</a>
+</body>
+</html>
