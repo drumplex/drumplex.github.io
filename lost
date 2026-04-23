@@ -5,157 +5,193 @@
 <title>...</title>
 
 <style>
-    body {
-        margin: 0;
-        background: black;
-        color: #b3ffb3;
-        font-family: "Courier New", monospace;
-        overflow: hidden;
-    }
+body {
+    margin: 0;
+    background: black;
+    color: #9aff9a;
+    font-family: monospace;
+    overflow: hidden;
+    cursor: none;
+}
 
-    #static {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        background: url("https://media.giphy.com/media/oEI9uBYSzLpBK/giphy.gif");
-        opacity: 0.03;
-        pointer-events: none;
-    }
+#noise {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: repeating-radial-gradient(circle, #000 0px, #000 2px, #010 3px);
+    opacity: 0.08;
+    animation: noiseMove 0.2s infinite;
+}
 
-    .center {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        text-align: center;
-        font-size: 28px;
-        letter-spacing: 2px;
-    }
+@keyframes noiseMove {
+    0% {transform: translate(0,0);}
+    50% {transform: translate(-2px,2px);}
+    100% {transform: translate(2px,-2px);}
+}
 
-    .glitch {
-        position: relative;
-        animation: flicker 2s infinite;
-    }
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 32px;
+    text-align: center;
+    letter-spacing: 3px;
+}
 
-    @keyframes flicker {
-        0% {opacity: 1;}
-        5% {opacity: 0.4;}
-        10% {opacity: 1;}
-        15% {opacity: 0.2;}
-        20% {opacity: 1;}
-        100% {opacity: 1;}
-    }
+#mainText {
+    transition: opacity 0.3s;
+}
 
-    .glitch::before,
-    .glitch::after {
-        content: attr(data-text);
-        position: absolute;
-        left: 0;
-        width: 100%;
-        overflow: hidden;
-        color: #00ff88;
-        clip: rect(0, 900px, 0, 0);
-    }
+#fakeCursor {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: #9aff9a;
+    border-radius: 50%;
+    pointer-events: none;
+    box-shadow: 0 0 10px #9aff9a;
+}
 
-    .glitch::before {
-        animation: glitchTop 2s infinite linear alternate-reverse;
-        color: #00ffaa;
-    }
+#ghostText {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 70%;
+    font-size: 14px;
+    opacity: 0;
+    color: #55ff55;
+}
 
-    .glitch::after {
-        animation: glitchBottom 2s infinite linear alternate-reverse;
-        color: #007744;
-    }
-
-    @keyframes glitchTop {
-        0% {clip: rect(0, 9999px, 0, 0);}
-        10% {clip: rect(0, 9999px, 40px, 0);}
-        20% {clip: rect(0, 9999px, 0, 0);}
-        30% {clip: rect(0, 9999px, 60px, 0);}
-        40% {clip: rect(0, 9999px, 0, 0);}
-        100% {clip: rect(0, 9999px, 0, 0);}
-    }
-
-    @keyframes glitchBottom {
-        0% {clip: rect(0, 9999px, 0, 0);}
-        10% {clip: rect(50px, 9999px, 90px, 0);}
-        20% {clip: rect(0, 9999px, 0, 0);}
-        30% {clip: rect(70px, 9999px, 120px, 0);}
-        40% {clip: rect(0, 9999px, 0, 0);}
-        100% {clip: rect(0, 9999px, 0, 0);}
-    }
-
-    #cursorLight {
-        position: fixed;
-        width: 200px;
-        height: 200px;
-        background: radial-gradient(circle, rgba(0,255,120,0.2), transparent 70%);
-        pointer-events: none;
-        mix-blend-mode: screen;
-        transform: translate(-50%, -50%);
-    }
-
-    #hiddenText {
-        position: absolute;
-        bottom: 10%;
-        width: 100%;
-        text-align: center;
-        font-size: 14px;
-        opacity: 0;
-        transition: opacity 2s;
-    }
+.flash {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+}
 </style>
 </head>
 
 <body>
 
-<div id="static"></div>
-<div id="cursorLight"></div>
+<div id="noise"></div>
+<div class="flash" id="flash"></div>
+<div id="fakeCursor"></div>
 
 <div class="center">
-    <div class="glitch" data-text="DO NOT STAY TOO LONG">DO NOT STAY TOO LONG</div>
+    <div id="mainText">stay</div>
 </div>
 
-<div id="hiddenText">it notices movement</div>
+<div id="ghostText">it saw that</div>
 
 <script>
-    const cursor = document.getElementById("cursorLight");
-    document.addEventListener("mousemove", e => {
-        cursor.style.left = e.clientX + "px";
-        cursor.style.top = e.clientY + "px";
-    });
+let messages = [
+    "stay",
+    "don't move",
+    "it tracks motion",
+    "too late",
+    "why did you move",
+    "stay still",
+    "it gets closer when you move"
+];
 
-    let messages = [
-        "you shouldn't be here",
-        "why are you still here",
-        "it can see you",
-        "leave before it does",
-        "it is closer now"
+let text = document.getElementById("mainText");
+let ghost = document.getElementById("ghostText");
+let flash = document.getElementById("flash");
+
+let i = 0;
+setInterval(() => {
+    text.style.opacity = 0;
+
+    setTimeout(() => {
+        text.innerText = messages[i];
+        text.style.opacity = 1;
+        i = (i + 1) % messages.length;
+    }, 300);
+}, 3500);
+
+
+// FAKE CURSOR LAG (this feels WRONG to people)
+let fake = document.getElementById("fakeCursor");
+let mouseX = 0, mouseY = 0;
+let fakeX = 0, fakeY = 0;
+
+document.addEventListener("mousemove", e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+    if (Math.random() > 0.7) {
+        ghost.style.opacity = 1;
+        setTimeout(()=> ghost.style.opacity = 0, 1000);
+    }
+});
+
+function animateCursor() {
+    fakeX += (mouseX - fakeX) * 0.08;
+    fakeY += (mouseY - fakeY) * 0.08;
+
+    fake.style.left = fakeX + "px";
+    fake.style.top = fakeY + "px";
+
+    requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+
+// RANDOM FREEZE
+setInterval(() => {
+    if (Math.random() > 0.75) {
+        document.body.style.pointerEvents = "none";
+        text.innerText = "don't move";
+
+        setTimeout(() => {
+            document.body.style.pointerEvents = "auto";
+        }, 1500 + Math.random()*2000);
+    }
+}, 4000);
+
+
+// SCREEN FLASH (very rare)
+setInterval(() => {
+    if (Math.random() > 0.92) {
+        flash.style.opacity = 0.9;
+        text.innerText = "it found you";
+
+        setTimeout(() => {
+            flash.style.opacity = 0;
+        }, 80);
+    }
+}, 3000);
+
+
+// TIME DISTORTION (tab title changes)
+setInterval(() => {
+    let titles = [
+        "…",
+        "still here?",
+        "it knows",
+        "leave",
+        "too late"
     ];
+    document.title = titles[Math.floor(Math.random()*titles.length)];
+}, 2000);
 
-    let index = 0;
-    setInterval(() => {
-        let el = document.querySelector(".glitch");
-        el.innerText = messages[index];
-        el.setAttribute("data-text", messages[index]);
-        index = (index + 1) % messages.length;
-    }, 4000);
 
-    // random flicker of hidden message
+// AFTER A WHILE, IT GETS WORSE
+setTimeout(() => {
     setInterval(() => {
-        const hidden = document.getElementById("hiddenText");
-        hidden.style.opacity = Math.random() > 0.7 ? 1 : 0;
-    }, 1500);
-
-    // random page shake
-    setInterval(() => {
-        if (Math.random() > 0.8) {
-            document.body.style.transform = "translate(" + (Math.random()*6-3) + "px," + (Math.random()*6-3) + "px)";
-            setTimeout(() => {
-                document.body.style.transform = "translate(0,0)";
+        if (Math.random() > 0.6) {
+            document.body.style.transform =
+                "translate("+(Math.random()*20-10)+"px,"+(Math.random()*20-10)+"px)";
+            setTimeout(()=>{
+                document.body.style.transform="translate(0,0)";
             }, 100);
         }
-    }, 2000);
+    }, 1500);
+}, 15000);
+
 </script>
 
 </body>
