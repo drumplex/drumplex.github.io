@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>...</title>
+
+<style>
+    body {
+        margin: 0;
+        background: black;
+        color: #b3ffb3;
+        font-family: "Courier New", monospace;
+        overflow: hidden;
+    }
+
+    #static {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: url("https://media.giphy.com/media/oEI9uBYSzLpBK/giphy.gif");
+        opacity: 0.03;
+        pointer-events: none;
+    }
+
+    .center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        font-size: 28px;
+        letter-spacing: 2px;
+    }
+
+    .glitch {
+        position: relative;
+        animation: flicker 2s infinite;
+    }
+
+    @keyframes flicker {
+        0% {opacity: 1;}
+        5% {opacity: 0.4;}
+        10% {opacity: 1;}
+        15% {opacity: 0.2;}
+        20% {opacity: 1;}
+        100% {opacity: 1;}
+    }
+
+    .glitch::before,
+    .glitch::after {
+        content: attr(data-text);
+        position: absolute;
+        left: 0;
+        width: 100%;
+        overflow: hidden;
+        color: #00ff88;
+        clip: rect(0, 900px, 0, 0);
+    }
+
+    .glitch::before {
+        animation: glitchTop 2s infinite linear alternate-reverse;
+        color: #00ffaa;
+    }
+
+    .glitch::after {
+        animation: glitchBottom 2s infinite linear alternate-reverse;
+        color: #007744;
+    }
+
+    @keyframes glitchTop {
+        0% {clip: rect(0, 9999px, 0, 0);}
+        10% {clip: rect(0, 9999px, 40px, 0);}
+        20% {clip: rect(0, 9999px, 0, 0);}
+        30% {clip: rect(0, 9999px, 60px, 0);}
+        40% {clip: rect(0, 9999px, 0, 0);}
+        100% {clip: rect(0, 9999px, 0, 0);}
+    }
+
+    @keyframes glitchBottom {
+        0% {clip: rect(0, 9999px, 0, 0);}
+        10% {clip: rect(50px, 9999px, 90px, 0);}
+        20% {clip: rect(0, 9999px, 0, 0);}
+        30% {clip: rect(70px, 9999px, 120px, 0);}
+        40% {clip: rect(0, 9999px, 0, 0);}
+        100% {clip: rect(0, 9999px, 0, 0);}
+    }
+
+    #cursorLight {
+        position: fixed;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(0,255,120,0.2), transparent 70%);
+        pointer-events: none;
+        mix-blend-mode: screen;
+        transform: translate(-50%, -50%);
+    }
+
+    #hiddenText {
+        position: absolute;
+        bottom: 10%;
+        width: 100%;
+        text-align: center;
+        font-size: 14px;
+        opacity: 0;
+        transition: opacity 2s;
+    }
+</style>
+</head>
+
+<body>
+
+<div id="static"></div>
+<div id="cursorLight"></div>
+
+<div class="center">
+    <div class="glitch" data-text="DO NOT STAY TOO LONG">DO NOT STAY TOO LONG</div>
+</div>
+
+<div id="hiddenText">it notices movement</div>
+
+<script>
+    const cursor = document.getElementById("cursorLight");
+    document.addEventListener("mousemove", e => {
+        cursor.style.left = e.clientX + "px";
+        cursor.style.top = e.clientY + "px";
+    });
+
+    let messages = [
+        "you shouldn't be here",
+        "why are you still here",
+        "it can see you",
+        "leave before it does",
+        "it is closer now"
+    ];
+
+    let index = 0;
+    setInterval(() => {
+        let el = document.querySelector(".glitch");
+        el.innerText = messages[index];
+        el.setAttribute("data-text", messages[index]);
+        index = (index + 1) % messages.length;
+    }, 4000);
+
+    // random flicker of hidden message
+    setInterval(() => {
+        const hidden = document.getElementById("hiddenText");
+        hidden.style.opacity = Math.random() > 0.7 ? 1 : 0;
+    }, 1500);
+
+    // random page shake
+    setInterval(() => {
+        if (Math.random() > 0.8) {
+            document.body.style.transform = "translate(" + (Math.random()*6-3) + "px," + (Math.random()*6-3) + "px)";
+            setTimeout(() => {
+                document.body.style.transform = "translate(0,0)";
+            }, 100);
+        }
+    }, 2000);
+</script>
+
+</body>
+</html>
