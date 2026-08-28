@@ -1,0 +1,18 @@
+{
+  "name": "chronarch-authority",
+  "version": "1.0.0",
+  "description": "A 3D sci-fi bureaucratic time-policing game featuring procedural rooms, dynamic alert levels, stealth, and branching narrative decisions.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "license": "MIT"
+}
