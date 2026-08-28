@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chronarch Authority</title>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <div id="game-container"></div>
+
+  <!-- HUD Overlay -->
+  <div id="hud-overlay" class="ui-layer">
+    <div id="crosshair"></div>
+    
+    <div id="top-bar">
+      <div class="hud-card">
+        <span class="label">VARIANT ID:</span>
+        <span id="variant-id-display">VAR-9042-DELTA</span>
+      </div>
+      <div class="hud-card">
+        <span class="label">DEVIATION:</span>
+        <span id="deviation-display">0</span>
+      </div>
+      <div class="hud-card">
+        <span class="label">ALERT LEVEL:</span>
+        <span id="alert-level-display">LEVEL 0 (NORMAL)</span>
+      </div>
+    </div>
+
+    <div id="interaction-prompt" class="hidden">
+      [E] Interact
+    </div>
+
+    <div id="stealth-indicator">
+      <span id="stealth-status">HIDDEN</span>
+    </div>
+
+    <div id="objective-tracker">
+      <div class="title">CURRENT DIRECTIVE</div>
+      <div id="objective-text">Report to Processing Station 4.</div>
+    </div>
+  </div>
+
+  <!-- Dialogue Panel -->
+  <div id="dialogue-modal" class="ui-layer hidden">
+    <div id="dialogue-box">
+      <div id="dialogue-speaker">NPC TITLE</div>
+      <div id="dialogue-text">Dialogue content here...</div>
+      <div id="dialogue-options"></div>
+    </div>
+  </div>
+
+  <!-- Inventory / Terminal Modal -->
+  <div id="terminal-modal" class="ui-layer hidden">
+    <div class="terminal-frame">
+      <div class="terminal-header">CHRONARCH AUTHORITY - TERMINAL ACCESS</div>
+      <div class="terminal-body" id="terminal-content"></div>
+      <button id="close-terminal-btn" class="sys-btn">CLOSE TERMINAL</button>
+    </div>
+  </div>
+
+  <!-- Start & Game Over Screens -->
+  <div id="blocker" class="ui-layer">
+    <div id="instructions">
+      <h1 class="title-logo">CHRONARCH AUTHORITY</h1>
+      <p>Click to Initialize Neural Sync (Start Game)</p>
+      <div class="controls-guide">
+        <p><strong>WASD</strong> : Movement | <strong>SHIFT</strong> : Run | <strong>CTRL</strong> : Crouch</p>
+        <p><strong>E</strong> : Interact | <strong>F</strong> : Use Temporal Rod | <strong>TAB</strong> : Inventory</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
