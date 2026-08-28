@@ -1,0 +1,251 @@
+:root {
+  --bronze: #c8963e;
+  --dark-gold: #8a6422;
+  --slate-gray: #1a1e24;
+  --panel-bg: rgba(18, 22, 28, 0.88);
+  --cyan-glow: #00f0ff;
+  --alert-red: #ff3333;
+  --hud-text: #e2d3b2;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #000;
+  font-family: 'Courier New', Courier, monospace;
+  color: var(--hud-text);
+}
+
+#game-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.ui-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* HUD elements */
+#crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  background-color: var(--cyan-glow);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 8px var(--cyan-glow);
+}
+
+#top-bar {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.hud-card {
+  background: var(--panel-bg);
+  border: 1px solid var(--bronze);
+  padding: 10px 16px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.hud-card .label {
+  font-weight: bold;
+  color: var(--dark-gold);
+  margin-right: 8px;
+}
+
+#interaction-prompt {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--panel-bg);
+  border: 1px solid var(--cyan-glow);
+  padding: 8px 16px;
+  color: var(--cyan-glow);
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+}
+
+#stealth-indicator {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  background: var(--panel-bg);
+  border: 1px solid var(--bronze);
+  padding: 8px 16px;
+}
+
+#objective-tracker {
+  position: absolute;
+  top: 80px;
+  right: 20px;
+  background: var(--panel-bg);
+  border-left: 3px solid var(--bronze);
+  padding: 12px;
+  max-width: 300px;
+}
+
+#objective-tracker .title {
+  color: var(--dark-gold);
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+}
+
+/* Dialogue Box */
+#dialogue-modal {
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-bottom: 50px;
+  pointer-events: auto;
+}
+
+#dialogue-box {
+  width: 700px;
+  background: var(--panel-bg);
+  border: 2px solid var(--bronze);
+  padding: 24px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.8);
+}
+
+#dialogue-speaker {
+  font-size: 1.2rem;
+  color: var(--bronze);
+  font-weight: bold;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--dark-gold);
+  padding-bottom: 4px;
+}
+
+#dialogue-text {
+  font-size: 1rem;
+  line-height: 1.4;
+  margin-bottom: 20px;
+}
+
+#dialogue-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dialogue-btn {
+  background: rgba(200, 150, 62, 0.1);
+  border: 1px solid var(--bronze);
+  color: var(--hud-text);
+  padding: 8px 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dialogue-btn:hover {
+  background: var(--bronze);
+  color: #000;
+}
+
+/* Modals & Blockers */
+#blocker {
+  background-color: rgba(10, 12, 16, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+}
+
+#instructions {
+  text-align: center;
+  cursor: pointer;
+  border: 2px solid var(--bronze);
+  padding: 40px;
+  background: var(--panel-bg);
+  max-width: 600px;
+}
+
+.title-logo {
+  font-size: 2.5rem;
+  color: var(--bronze);
+  margin-bottom: 20px;
+  letter-spacing: 4px;
+  text-shadow: 0 0 10px rgba(200, 150, 62, 0.4);
+}
+
+.controls-guide {
+  margin-top: 30px;
+  font-size: 0.85rem;
+  color: #8a8a8a;
+  line-height: 1.6;
+}
+
+.terminal-frame {
+  width: 80%;
+  height: 80%;
+  margin: 5% auto;
+  background: #080c10;
+  border: 2px solid var(--cyan-glow);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+}
+
+.terminal-header {
+  color: var(--cyan-glow);
+  font-size: 1.2rem;
+  border-bottom: 1px solid var(--cyan-glow);
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+.terminal-body {
+  flex-grow: 1;
+  overflow-y: auto;
+  color: #a0f0f0;
+  line-height: 1.5;
+}
+
+.sys-btn {
+  background: transparent;
+  border: 1px solid var(--cyan-glow);
+  color: var(--cyan-glow);
+  padding: 8px 16px;
+  cursor: pointer;
+  margin-top: 15px;
+  align-self: flex-end;
+}
+
+.sys-btn:hover {
+  background: var(--cyan-glow);
+  color: #000;
+}
