@@ -5,13 +5,8 @@ import { RoomGenerator } from './procedural/RoomGenerator.js';
 import { GuardAI } from './ai/GuardAI.js';
 import { TemporalDeviationSystem } from './world/TemporalDeviationSystem.js';
 import { TemporalRod } from './world/TemporalRod.js';
-import { CourtSystem } from './world/CourtSystem.js';
-import { AudioEngine } from './world/AudioEngine.js';
-import { InventorySystem } from './inventory/InventorySystem.js';
-import { MissionManager } from './missions/MissionManager.js';
-import { DialogueManager } from './dialogue/DialogueManager.js';
 import { UIManager } from './UI/UIManager.js';
-import { SaveSystem } from './save/SaveSystem.js';
+import { DIALOGUE_NODES } from './data/DialogueData.js';
 
 class ChronarchGame {
   constructor() {
