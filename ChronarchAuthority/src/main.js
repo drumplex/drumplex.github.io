@@ -12,6 +12,8 @@ class ChronarchGame {
   constructor() {
     this.container = document.getElementById('game-container');
     this.blocker = document.getElementById('instructions');
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    this.scene.add(ambientLight);
 
     // 1. Scene & Renderer Setup
     this.scene = new THREE.Scene();
