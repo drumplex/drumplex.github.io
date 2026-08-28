@@ -5,7 +5,7 @@ import { RoomGenerator } from './procedural/RoomGenerator.js';
 import { GuardAI } from './ai/GuardAI.js';
 import { TemporalDeviationSystem } from './world/TemporalDeviationSystem.js';
 import { TemporalRod } from './world/TemporalRod.js';
-import { UIManager } from './UI/UIManager.js';
+import { UIManager } from './ui/UIManager.js';
 import { DIALOGUE_NODES } from './data/DialogueData.js';
 
 class ChronarchGame {
