@@ -1,0 +1,23 @@
+[
+  {
+    "id": "COR-003",
+    "name": "The Glowing Mask",
+    "objectClass": "Euclid",
+    "image": "https://tse1.mm.bing.net/th/id/OIP.gLObeb3qfaO1lg6ydoiy5wHaFj?r=0&rs=1&pid=ImgDetMain&o=7&rm=3",
+    "content": "**Item #:** COR-003\n\n**Object Class:** Safe\n\n**Special Containment Procedures:** COR-003 must be contained in a titanium container, 5mm thick. It must be then surrounded by a 5 x 5 foot tub of water, and all testings must be done 10 feet away from the box.\n\n**Description:** COR-003 is an ancient egyptian mask worn by the pharaoh. It has two exaggerated ears, and a long neck."
+  },
+  {
+    "id": "COR-001",
+    "name": "The Obsidian Compass",
+    "objectClass": "Safe",
+    "image": "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=600&q=80",
+    "content": "**Item #:** COR-001\n\n**Object Class:** Safe\n\n**Special Containment Procedures:** COR-001 is to be kept in a standard secure containment locker at Site-19. Testing requires Level 3 authorization.\n\n**Description:** COR-001 is a hand-carved compass composed of high-purity obsidian and brass. Instead of pointing toward magnetic north, the needle consistently rotates to indicate the nearest point of temporal anomaly or spatial distortion within a [REDACTED] kilometer radius."
+  },
+  {
+    "id": "COR-449",
+    "name": "Amnestic Phonograph",
+    "objectClass": "Euclid",
+    "image": "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=600&q=80",
+    "content": "**Item #:** COR-449\n\n**Object Class:** Euclid\n\n**Special Containment Procedures:** Stored in an acoustic dampening vault. No personnel are permitted within 5 meters while the cylinder is mounted.\n\n**Description:** COR-449 is a 19th-century brass horn phonograph. When any wax cylinder is played on COR-449, listeners within hearing range immediately experience complete retrograde amnesia spanning the preceding [REDACTED] hours."
+  }
+]
