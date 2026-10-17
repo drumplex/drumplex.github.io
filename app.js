@@ -13,7 +13,7 @@ const DEFAULT_RELICS = [
         category: "incidents",
         objectClass: "Euclid",
         image: "",
-        content: `**Incident #:** INC-042\n\n**Date:** [REDACTED]\n\n**Description:** Security failure at Sector 4 resulted in unauthorized personnel accessing containment unit COR-449. <span class="redacted">All subjects were successfully amnesticized</span> within 3 hours.`
+        content: `**Incident #:** INC-042\n\n**Date:** [REDACTED]\n\n**Description:** Security failure at Sector 4 resulted in unauthorized personnel accessing containment unit [[COR-449]]. <span class="redacted">All subjects were successfully amnesticized</span> within 3 hours.`
     },
     {
         id: "TGT-991",
@@ -55,6 +55,7 @@ async function loadRelics() {
                 localStorage.setItem('cor_relics_cache', JSON.stringify(relics));
                 renderRelicList();
                 updateStats();
+                populateLinkDropdown();
                 return;
             }
         }
@@ -67,12 +68,14 @@ async function loadRelics() {
     localStorage.setItem('cor_relics_cache', JSON.stringify(relics));
     renderRelicList();
     updateStats();
+    populateLinkDropdown();
 }
 
 async function saveRelicsToStorage() {
     localStorage.setItem('cor_relics_cache', JSON.stringify(relics));
     renderRelicList();
     updateStats();
+    populateLinkDropdown();
 
     if (ghConfig.owner && ghConfig.repo && ghConfig.token) {
         try {
@@ -120,9 +123,25 @@ function renderRelicList(filter = '') {
     });
 }
 
+function parseCustomMarkdown(content) {
+    // Convert [[ID]] or [[ID|Custom Name]] into clickable internal links
+    content = content.replace(/\[\[(.*?)\]\]/g, (match, p1) => {
+        let parts = p1.split('|');
+        let id = parts[0].trim();
+        let name = parts[1] ? parts[1].trim() : id;
+        return `<span class="internal-link" onclick="viewRelic('${id}')">${escapeHtml(name)}</span>`;
+    });
+
+    let html = marked.parse(content);
+    return html;
+}
+
 function viewRelic(id) {
     const r = relics.find(item => item.id === id);
-    if (!r) return;
+    if (!r) {
+        alert("Record not found in archive.");
+        return;
+    }
 
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById('view-detail').classList.add('active');
@@ -139,7 +158,7 @@ function viewRelic(id) {
         html += `<div style="text-align: center;"><img src="${escapeHtml(r.image)}" alt="" style="max-height: 300px; border: 1px solid #111; padding: 3px; margin: 10px 0;"></div>`;
     }
 
-    html += `<div class="doc-body">${marked.parse(r.content)}</div>`;
+    html += `<div class="doc-body">${parseCustomMarkdown(r.content)}</div>`;
     document.getElementById('document-render-area').innerHTML = html;
 
     document.querySelectorAll('.redacted').forEach(el => {
@@ -189,13 +208,25 @@ function openEditor(id = null) {
         document.getElementById('edit-category').value = currentCategory;
         document.getElementById('edit-class').value = 'Safe';
         document.getElementById('edit-image').value = '';
-        document.getElementById('edit-content').value = `**Description:** Type your text here. Wrap text like <span class="redacted">secret</span> to redact.`;
+        document.getElementById('edit-content').value = `**Item #:** COR-XXXX\n\n**Object Class:** Safe\n\n**Special Containment Procedures:** ...\n\n**Description:** ...`;
     }
     updatePreview();
 }
 
 function updatePreview() {
-    document.getElementById('markdown-preview').innerHTML = marked.parse(document.getElementById('edit-content').value);
+    document.getElementById('markdown-preview').innerHTML = parseCustomMarkdown(document.getElementById('edit-content').value);
+}
+
+function populateLinkDropdown() {
+    const select = document.getElementById('tb-link-select');
+    if (!select) return;
+    select.innerHTML = '<option value="">-- Link to Record --</option>';
+    relics.forEach(r => {
+        const opt = document.createElement('option');
+        opt.value = r.id;
+        opt.textContent = `${r.id}: ${r.name}`;
+        select.appendChild(opt);
+    });
 }
 
 function setupEventListeners() {
@@ -220,6 +251,39 @@ function setupEventListeners() {
 
     document.getElementById('search-input').addEventListener('input', (e) => renderRelicList(e.target.value));
     document.getElementById('edit-content').addEventListener('input', updatePreview);
+
+    // Toolbar formatting actions
+    const textarea = document.getElementById('edit-content');
+
+    function insertAtCursor(before, after = '') {
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const text = textarea.value;
+        const selected = text.substring(start, end);
+        textarea.value = text.substring(0, start) + before + selected + after + text.substring(end);
+        textarea.selectionStart = start + before.length;
+        textarea.selectionEnd = end + before.length;
+        textarea.focus();
+        updatePreview();
+    }
+
+    document.getElementById('tb-redact').addEventListener('click', () => insertAtCursor('<span class="redacted">', '</span>'));
+    document.getElementById('tb-bold').addEventListener('click', () => insertAtCursor('**', '**'));
+    document.getElementById('tb-italic').addEventListener('click', () => insertAtCursor('*', '*'));
+    document.getElementById('tb-h2').addEventListener('click', () => insertAtCursor('## '));
+    document.getElementById('tb-quote').addEventListener('click', () => insertAtCursor('> '));
+
+    document.getElementById('tb-link-select').addEventListener('change', (e) => {
+        const val = e.target.value;
+        if (!val) return;
+        insertAtCursor(`[[${val}]]`);
+        e.target.value = '';
+    });
+
+    document.getElementById('tb-template').addEventListener('click', () => {
+        textarea.value = `**Item #:** COR-XXXX\n\n**Object Class:** Euclid\n\n**Special Containment Procedures:** [REDACTED]\n\n**Description:** \n\n**Addendum 1.1:** [DATA EXPUNGED]`;
+        updatePreview();
+    });
 
     document.getElementById('btn-save').addEventListener('click', async () => {
         const id = document.getElementById('edit-id').value.trim();
