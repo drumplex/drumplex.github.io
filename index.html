@@ -3,42 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COR - Containment of Relics | Secure. Contain. Protect.</title>
+    <title>COR Foundation Archive</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Google Fonts for SCP aesthetic -->
-    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Share+Tech+Mono&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome for icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Marked.js for Markdown parsing -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
-<body class="theme-dark">
-    <!-- Top Clearance Banner -->
-    <div id="clearance-banner">
-        <span><i class="fa-solid fa-triangle-exclamation"></i> WARNING: LEVEL 4 CLEARANCE REQUIRED <i class="fa-solid fa-triangle-exclamation"></i></span>
-        <span class="banner-right">UNAUTHORIZED ACCESS WILL RESULT IN IMMEDIATE TERMINATION</span>
-    </div>
+<body class="theme-scp">
+    <!-- Top SCP Header Banner -->
+    <header id="scp-top-header">
+        <div class="header-content">
+            <div class="logo-title-area">
+                <img src="logo.png" alt="COR Logo" id="site-logo" onerror="this.style.display='none'">
+                <div class="site-title-text">
+                    <h1>COR FOUNDATION</h1>
+                    <p>Secure. Contain. Protect.</p>
+                </div>
+            </div>
+            <div class="header-right-menu">
+                <button id="btn-sync-config" class="scp-top-btn"><i class="fa-solid fa-key"></i> Sync Config</button>
+            </div>
+        </div>
+    </header>
 
     <div id="app-container">
         <!-- Sidebar Navigation -->
         <aside id="sidebar">
-            <div class="sidebar-header">
-                <h1>COR</h1>
-                <p>Containment of Relics</p>
-                <div class="db-status"><span class="pulse-dot"></span> DATABASE ONLINE</div>
-            </div>
-
             <div class="sidebar-actions">
-                <button id="btn-create" class="cor-btn primary"><i class="fa-solid fa-file-circle-plus"></i> Create New File</button>
-                <button id="btn-sync-config" class="cor-btn secondary" title="Configure GitHub Sync"><i class="fa-solid fa-key"></i> GitHub Sync</button>
+                <button id="btn-create" class="scp-btn primary"><i class="fa-solid fa-file-circle-plus"></i> New Page</button>
             </div>
 
             <div class="search-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="search-input" placeholder="Search database...">
+                <input type="text" id="search-input" placeholder="Search archive...">
             </div>
 
-            <div class="nav-section-title">Classified Index</div>
+            <!-- Categories / Tabs -->
+            <div class="nav-section-title">Database Index</div>
+            <div class="category-tabs">
+                <button class="cat-tab active" data-cat="relics">Relics</button>
+                <button class="cat-tab" data-cat="incidents">Incidents</button>
+                <button class="cat-tab locked" data-cat="targets">Targets <i class="fa-solid fa-lock"></i></button>
+            </div>
+
             <ul id="relic-list" class="relic-list">
                 <!-- Dynamically populated -->
             </ul>
@@ -53,57 +60,68 @@
 
         <!-- Main Content Area -->
         <main id="main-content">
-            <!-- Welcome / Home View -->
+            <!-- Welcome View -->
             <div id="view-home" class="view active">
                 <div class="terminal-welcome">
-                    <div class="scp-logo-box">
-                        <svg viewBox="0 0 100 100" class="scp-seal">
-                            <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="4"/>
-                            <path d="M50 10 L85 85 L15 85 Z" fill="none" stroke="currentColor" stroke-width="4"/>
-                            <circle cx="50" cy="55" r="18" fill="none" stroke="currentColor" stroke-width="3"/>
-                        </svg>
-                    </div>
-                    <h2>CONTAINMENT OF RELICS ARCHIVE</h2>
-                    <p class="subtitle">Secure. Contain. Protect. Documenting anomalous artifacts across reality.</p>
+                    <h2>ARCHIVE DATABASE ONLINE</h2>
+                    <p class="subtitle">Access restricted to authorized personnel only. All actions are logged.</p>
                     <div class="terminal-box">
-                        <p>> SYSTEM BOOT SEQUENCE COMPLETE.</p>
-                        <p>> WELCOME, RESEARCHER. ALL ACTIVITIES ARE MONITORED.</p>
-                        <p>> Select an item from the sidebar index or create a new file to contribute to the database.</p>
+                        <p>> SYSTEM INITIALIZED.</p>
+                        <p>> SELECT AN INDEX CATEGORY FROM THE SIDEBAR TO BEGIN REVIEWING FILES.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Detail / Reader View -->
+            <!-- Detail View -->
             <div id="view-detail" class="view">
                 <div class="doc-header-actions">
-                    <button id="btn-edit-doc" class="cor-btn"><i class="fa-solid fa-pen-to-square"></i> Edit Page</button>
-                    <button id="btn-back" class="cor-btn"><i class="fa-solid fa-arrow-left"></i> Return</button>
+                    <button id="btn-edit-doc" class="scp-btn"><i class="fa-solid fa-pen-to-square"></i> Edit Page</button>
+                    <button id="btn-back" class="scp-btn"><i class="fa-solid fa-arrow-left"></i> Return</button>
                 </div>
-                <div id="document-render-area" class="scp-document">
-                    <!-- Rendered markdown / object details -->
+                <div id="document-render-area" class="scp-document"></div>
+            </div>
+
+            <!-- Locked Target Security Check View -->
+            <div id="view-locked" class="view">
+                <div class="locked-container">
+                    <i class="fa-solid fa-triangle-exclamation locked-icon"></i>
+                    <h2>SECURITY CLEARANCE INSUFFICIENT</h2>
+                    <p>The "TARGETS" index contains high-priority restricted profiles. Level 5 O5-Council clearance or an override passphrase is required to bypass automated redaction protocols.</p>
+                    <div class="form-group" style="max-width: 300px; margin: 20px auto;">
+                        <input type="password" id="target-passcode" placeholder="Enter Clearance Passcode">
+                    </div>
+                    <button id="btn-unlock-targets" class="scp-btn primary">Authenticate Override</button>
                 </div>
             </div>
 
-            <!-- Editor / Creator View -->
+            <!-- Editor View -->
             <div id="view-editor" class="view">
                 <div class="editor-header">
-                    <h2 id="editor-title-heading">Create New Relic Record</h2>
+                    <h2 id="editor-title-heading">Create New Record</h2>
                     <div class="editor-actions">
-                        <button id="btn-save" class="cor-btn primary"><i class="fa-solid fa-floppy-disk"></i> Save Record</button>
-                        <button id="btn-cancel-edit" class="cor-btn"><i class="fa-solid fa-xmark"></i> Cancel</button>
+                        <button id="btn-save" class="scp-btn primary"><i class="fa-solid fa-floppy-disk"></i> Save Record</button>
+                        <button id="btn-cancel-edit" class="scp-btn"><i class="fa-solid fa-xmark"></i> Cancel</button>
                     </div>
                 </div>
 
                 <div class="editor-grid">
                     <div class="form-group">
-                        <label>Item ID / Code</label>
+                        <label>ID / Code</label>
                         <input type="text" id="edit-id" placeholder="e.g. COR-8921">
                     </div>
                     <div class="form-group">
-                        <label>Relic Name / Designation</label>
-                        <input type="text" id="edit-name" placeholder="e.g. The Infinite Metronome">
+                        <label>Designation / Name</label>
+                        <input type="text" id="edit-name" placeholder="e.g. Operation Echo">
                     </div>
                     <div class="form-group">
+                        <label>Category</label>
+                        <select id="edit-category">
+                            <option value="relics">Relic</option>
+                            <option value="incidents">Incident</option>
+                            <option value="targets">Target (Restricted)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="class-group">
                         <label>Object Class</label>
                         <select id="edit-class">
                             <option value="Safe">Safe</option>
@@ -118,13 +136,13 @@
 
                 <div class="form-group full">
                     <label>Image URL (Optional)</label>
-                    <input type="text" id="edit-image" placeholder="https://example.com/relic-photo.jpg">
+                    <input type="text" id="edit-image" placeholder="https://example.com/photo.jpg">
                 </div>
 
                 <div class="editor-layout">
                     <div class="editor-pane">
-                        <label>Markdown Content (Supports SCP format, [REDACTED], headers, etc.)</label>
-                        <textarea id="edit-content" placeholder="**Item #:** COR-XXXX..."></textarea>
+                        <label>Markdown Content (Wrap secret words in &lt;span class="redacted"&gt;text&lt;/span&gt;)</label>
+                        <textarea id="edit-content"></textarea>
                     </div>
                     <div class="preview-pane">
                         <label>Live Preview</label>
@@ -135,35 +153,22 @@
         </main>
     </div>
 
-    <!-- GitHub Sync Modal -->
+    <!-- Sync Modal -->
     <div id="sync-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fa-solid fa-code-commit"></i> Global GitHub Sync Setup</h3>
+                <h3>GitHub Sync Configuration</h3>
                 <button class="modal-close">&times;</button>
             </div>
             <div class="modal-body">
-                <p>To allow pages saved by any visitor to persist globally on GitHub Pages, connect your GitHub Repository and Personal Access Token (PAT with <code>repo</code> permissions).</p>
-                <div class="form-group">
-                    <label>GitHub Username / Organization</label>
-                    <input type="text" id="gh-owner" placeholder="e.g. username">
-                </div>
-                <div class="form-group">
-                    <label>Repository Name</label>
-                    <input type="text" id="gh-repo" placeholder="e.g. cor-archive">
-                </div>
-                <div class="form-group">
-                    <label>Branch</label>
-                    <input type="text" id="gh-branch" value="main" placeholder="main">
-                </div>
-                <div class="form-group">
-                    <label>Personal Access Token (PAT)</label>
-                    <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx">
-                    <small>Stored securely in your browser's localStorage for auto-committing new files to your repo.</small>
-                </div>
+                <p>Connect your GitHub repository to enable global record storage.</p>
+                <div class="form-group"><label>Username</label><input type="text" id="gh-owner"></div>
+                <div class="form-group"><label>Repository Name</label><input type="text" id="gh-repo"></div>
+                <div class="form-group"><label>Branch</label><input type="text" id="gh-branch" value="main"></div>
+                <div class="form-group"><label>Personal Access Token (PAT)</label><input type="password" id="gh-token"></div>
                 <div class="modal-actions">
-                    <button id="btn-test-sync" class="cor-btn primary">Connect & Sync</button>
-                    <button id="btn-disable-sync" class="cor-btn danger">Disable Global Sync</button>
+                    <button id="btn-test-sync" class="scp-btn primary">Connect & Save</button>
+                    <button id="btn-disable-sync" class="scp-btn danger">Disable Sync</button>
                 </div>
             </div>
         </div>
