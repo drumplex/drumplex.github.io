@@ -139,13 +139,26 @@
                     <input type="text" id="edit-image" placeholder="https://example.com/photo.jpg">
                 </div>
 
+                <!-- Professional Formatting Toolbar -->
+                <div class="editor-toolbar">
+                    <button type="button" id="tb-redact" class="toolbar-btn" title="Redact selected text"><i class="fa-solid fa-square"></i> [REDACT]</button>
+                    <button type="button" id="tb-bold" class="toolbar-btn" title="Bold"><i class="fa-solid fa-bold"></i></button>
+                    <button type="button" id="tb-italic" class="toolbar-btn" title="Italic"><i class="fa-solid fa-italic"></i></button>
+                    <button type="button" id="tb-h2" class="toolbar-btn" title="Heading">H2</button>
+                    <button type="button" id="tb-quote" class="toolbar-btn" title="Quote Block"><i class="fa-solid fa-quote-right"></i></button>
+                    <div class="toolbar-divider"></div>
+                    <select id="tb-link-select" class="toolbar-select" title="Link to another record">
+                        <option value="">-- Link to Record --</option>
+                    </select>
+                    <button type="button" id="tb-template" class="scp-btn" style="margin-left: auto; font-size: 0.75rem;"><i class="fa-solid fa-file-lines"></i> Insert SCP Template</button>
+                </div>
+
                 <div class="editor-layout">
                     <div class="editor-pane">
-                        <label>Markdown Content (Wrap secret words in &lt;span class="redacted"&gt;text&lt;/span&gt;)</label>
-                        <textarea id="edit-content"></textarea>
+                        <textarea id="edit-content" placeholder="Type your document content here..."></textarea>
                     </div>
                     <div class="preview-pane">
-                        <label>Live Preview</label>
+                        <div class="preview-header-label">Live Preview</div>
                         <div id="markdown-preview" class="scp-document preview-box"></div>
                     </div>
                 </div>
