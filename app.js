@@ -6,21 +6,20 @@ const DEFAULT_RELICS = [
         name: "The Obsidian Compass",
         objectClass: "Safe",
         image: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=600&q=80",
-        content: `**Item #:** COR-001\n\n**Object Class:** Safe\n\n**Special Containment Procedures:** COR-001 is to be kept in a standard secure containment locker at Site-19. Testing requires Level 3 authorization.\n\n**Description:** COR-001 is a hand-carved compass composed of high-purity obsidian and brass. Instead of pointing toward magnetic north, the needle consistently rotates to indicate the nearest point of temporal anomaly or spatial distortion within a [REDACTED] kilometer radius.`
+        content: `**Item #:** COR-001\n\n**Object Class:** Safe\n\n**Special Containment Procedures:** COR-001 is to be kept in a standard secure containment locker at Site-19. Testing requires Level 3 authorization.\n\n**Description:** COR-001 is a hand-carved compass composed of high-purity obsidian and brass. Instead of pointing toward magnetic north, the needle consistently rotates to indicate the nearest point of temporal anomaly or spatial distortion within a <span class="redacted">[REDACTED]</span> kilometer radius.`
     },
     {
         id: "COR-449",
         name: "Amnestic Phonograph",
         objectClass: "Euclid",
         image: "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=600&q=80",
-        content: `**Item #:** COR-449\n\n**Object Class:** Euclid\n\n**Special Containment Procedures:** Stored in an acoustic dampening vault. No personnel are permitted within 5 meters while the cylinder is mounted.\n\n**Description:** COR-449 is a 19th-century brass horn phonograph. When any wax cylinder is played on COR-449, listeners within hearing range immediately experience complete retrograde amnesia spanning the preceding [REDACTED] hours.`
+        content: `**Item #:** COR-449\n\n**Object Class:** Euclid\n\n**Special Containment Procedures:** Stored in an acoustic dampening vault. No personnel are permitted within 5 meters while the cylinder is mounted.\n\n**Description:** COR-449 is a 19th-century brass horn phonograph. When any wax cylinder is played on COR-449, listeners within hearing range immediately experience complete retrograde amnesia spanning the preceding <span class="redacted">[REDACTED]</span> hours.`
     }
 ];
 
 let relics = [];
 let currentEditingId = null;
 
-// GitHub Config state
 let ghConfig = {
     owner: localStorage.getItem('cor_gh_owner') || '',
     repo: localStorage.getItem('cor_gh_repo') || '',
@@ -28,18 +27,15 @@ let ghConfig = {
     token: localStorage.getItem('cor_gh_token') || ''
 };
 
-// Initialization
 document.addEventListener('DOMContentLoaded', async () => {
     await loadRelics();
     setupEventListeners();
     updateSyncStatusUI();
 });
 
-// Load relics from GitHub data folder or fallback to localStorage / defaults
 async function loadRelics() {
     try {
         if (ghConfig.owner && ghConfig.repo && ghConfig.token) {
-            // Try loading index of relics from repository folder `data/relics.json`
             const res = await fetch(`https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/data/relics.json`, {
                 headers: { 'Authorization': `token ${ghConfig.token}` }
             });
@@ -57,7 +53,6 @@ async function loadRelics() {
         console.warn("Could not fetch remote GitHub index, checking local cache.", e);
     }
 
-    // Fallback to local storage or defaults
     const cached = localStorage.getItem('cor_relics_cache');
     if (cached) {
         relics = JSON.parse(cached);
@@ -69,7 +64,6 @@ async function loadRelics() {
     updateStats();
 }
 
-// Save all relics to GitHub and local cache
 async function saveRelicsToStorage() {
     localStorage.setItem('cor_relics_cache', JSON.stringify(relics));
     renderRelicList();
@@ -80,7 +74,6 @@ async function saveRelicsToStorage() {
             const filePath = 'data/relics.json';
             const contentEncoded = btoa(unescape(encodeURIComponent(JSON.stringify(relics, null, 2))));
             
-            // Get current file sha if exists
             let sha = null;
             const getRes = await fetch(`https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${filePath}`, {
                 headers: { 'Authorization': `token ${ghConfig.token}` }
@@ -90,7 +83,6 @@ async function saveRelicsToStorage() {
                 sha = fileData.sha;
             }
 
-            // Commit to GitHub repo
             const putRes = await fetch(`https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/contents/${filePath}`, {
                 method: 'PUT',
                 headers: {
@@ -119,7 +111,6 @@ async function saveRelicsToStorage() {
     }
 }
 
-// Render Sidebar List
 function renderRelicList(filter = '') {
     const listEl = document.getElementById('relic-list');
     listEl.innerHTML = '';
@@ -145,7 +136,6 @@ function renderRelicList(filter = '') {
     });
 }
 
-// View Relic Details
 function viewRelic(id) {
     const r = relics.find(item => item.id === id);
     if (!r) return;
@@ -165,27 +155,23 @@ function viewRelic(id) {
         html += `<div style="text-align: center;"><img src="${escapeHtml(r.image)}" alt="${escapeHtml(r.name)}" style="max-height: 350px;"></div>`;
     }
 
-    // Parse markdown and convert [REDACTED] tags into interactive black bars
+    // Directly render user markdown without auto-replacing text. 
+    // To redact something, type: <span class="redacted">[REDACTED]</span> in your markdown content.
     let parsedHtml = marked.parse(r.content);
-    parsedHtml = parsedHtml.replace(/[REDACTED]/g, '<span class="redacted" title="Click to reveal">[REDACTED]</span>');
-    parsedHtml = parsedHtml.replace(/[DATA EXPUNGED]/g, '<span class="redacted" title="Click to reveal">[DATA EXPUNGED]</span>');
-
     html += `<div class="doc-body">${parsedHtml}</div>`;
 
     document.getElementById('document-render-area').innerHTML = html;
 
-    // Enable clicking redacted sections to reveal
+    // Click to reveal redacted sections cleanly (removes the black bar to show normal text)
     document.querySelectorAll('.redacted').forEach(el => {
         el.addEventListener('click', () => {
-            el.style.backgroundColor = '#333';
-            el.style.color = '#ff5555';
+            el.classList.toggle('revealed');
         });
     });
 
     document.getElementById('btn-edit-doc').onclick = () => openEditor(r.id);
 }
 
-// Open Editor for Creating or Editing
 function openEditor(id = null) {
     currentEditingId = id;
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -195,7 +181,7 @@ function openEditor(id = null) {
         const r = relics.find(item => item.id === id);
         document.getElementById('editor-title-heading').textContent = `Edit Record: ${r.id}`;
         document.getElementById('edit-id').value = r.id;
-        document.getElementById('edit-id').disabled = true; // can't change ID once created
+        document.getElementById('edit-id').disabled = true;
         document.getElementById('edit-name').value = r.name;
         document.getElementById('edit-class').value = r.objectClass;
         document.getElementById('edit-image').value = r.image || '';
@@ -207,21 +193,18 @@ function openEditor(id = null) {
         document.getElementById('edit-name').value = '';
         document.getElementById('edit-class').value = 'Safe';
         document.getElementById('edit-image').value = '';
-        document.getElementById('edit-content').value = `**Item #:** COR-XXXX\n\n**Object Class:** Safe\n\n**Special Containment Procedures:** ...\n\n**Description:** ...`;
+        document.getElementById('edit-content').value = `**Item #:** COR-XXXX\n\n**Object Class:** Safe\n\n**Special Containment Procedures:** ...\n\n**Description:** Type your text here. To redact text, wrap it like this: <span class="redacted">secret text</span>`;
     }
 
     updatePreview();
 }
 
-// Update Markdown Live Preview
 function updatePreview() {
     const content = document.getElementById('edit-content').value;
     let parsed = marked.parse(content);
-    parsed = parsed.replace(/[REDACTED]/g, '<span class="redacted">[REDACTED]</span>');
     document.getElementById('markdown-preview').innerHTML = parsed;
 }
 
-// Event Listeners Setup
 function setupEventListeners() {
     document.getElementById('btn-create').addEventListener('click', () => openEditor(null));
     document.getElementById('btn-back').addEventListener('click', () => {
@@ -242,7 +225,6 @@ function setupEventListeners() {
 
     document.getElementById('edit-content').addEventListener('input', updatePreview);
 
-    // Save button
     document.getElementById('btn-save').addEventListener('click', async () => {
         const id = document.getElementById('edit-id').value.trim();
         const name = document.getElementById('edit-name').value.trim();
@@ -266,7 +248,6 @@ function setupEventListeners() {
         viewRelic(id);
     });
 
-    // GitHub Modal bindings
     const modal = document.getElementById('sync-modal');
     document.getElementById('btn-sync-config').addEventListener('click', () => {
         document.getElementById('gh-owner').value = ghConfig.owner;
