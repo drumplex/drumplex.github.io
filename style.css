@@ -31,7 +31,7 @@ body {
     background: #090b0e;
     color: #fff;
     border-bottom: 2px solid var(--accent-red);
-    padding: 8px 20px;
+    padding: 10px 20px;
 }
 
 .header-content {
@@ -43,25 +43,25 @@ body {
 .logo-title-area {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 15px;
 }
 
 #site-logo {
-    max-height: 40px;
-    max-width: 40px;
+    max-height: 75px;
+    max-width: 75px;
     object-fit: contain;
     border-radius: 4px;
 }
 
 .site-title-text h1 {
     font-family: var(--font-mono);
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     letter-spacing: 2px;
     color: #fff;
 }
 
 .site-title-text p {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
     letter-spacing: 1px;
 }
