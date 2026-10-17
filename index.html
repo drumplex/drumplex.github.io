@@ -1,65 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chronarch Authority</title>
-  <link rel="stylesheet" href="style.css">
-
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.160.1/build/three.module.js"
-      }
-    }
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COR - Containment of Relics | Secure. Contain. Protect.</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for SCP aesthetic -->
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Share+Tech+Mono&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
-<body>
-  <div id="game-container"></div>
-
-  <div id="hud-overlay">
-    <div id="crosshair"></div>
-    
-    <div id="top-bar">
-      <div class="hud-card"><span class="label">VARIANT ID:</span> <span>VAR-9042-DELTA</span></div>
-      <div class="hud-card"><span class="label">DEVIATION:</span> <span id="deviation-display">0</span></div>
-      <div class="hud-card"><span class="label">ALERT:</span> <span id="alert-display">LEVEL 0 (NORMAL)</span></div>
+<body class="theme-dark">
+    <!-- Top Clearance Banner -->
+    <div id="clearance-banner">
+        <span><i class="fa-solid fa-triangle-exclamation"></i> WARNING: LEVEL 4 CLEARANCE REQUIRED <i class="fa-solid fa-triangle-exclamation"></i></span>
+        <span class="banner-right">UNAUTHORIZED ACCESS WILL RESULT IN IMMEDIATE TERMINATION</span>
     </div>
 
-    <div id="interaction-prompt" class="hidden">[E] Interact</div>
+    <div id="app-container">
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar">
+            <div class="sidebar-header">
+                <h1>COR</h1>
+                <p>Containment of Relics</p>
+                <div class="db-status"><span class="pulse-dot"></span> DATABASE ONLINE</div>
+            </div>
 
-    <div id="objective-tracker">
-      <div class="title">CURRENT DIRECTIVE</div>
-      <div id="objective-text">Locate the Archives Terminal.</div>
-    </div>
-  </div>
+            <div class="sidebar-actions">
+                <button id="btn-create" class="cor-btn primary"><i class="fa-solid fa-file-circle-plus"></i> Create New File</button>
+                <button id="btn-sync-config" class="cor-btn secondary" title="Configure GitHub Sync"><i class="fa-solid fa-key"></i> GitHub Sync</button>
+            </div>
 
-  <div id="dialogue-modal" class="hidden">
-    <div id="dialogue-box">
-      <div id="dialogue-speaker">NPC</div>
-      <div id="dialogue-text">...</div>
-      <div id="dialogue-options"></div>
-    </div>
-  </div>
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-input" placeholder="Search database...">
+            </div>
 
-  <div id="terminal-modal" class="hidden">
-    <div class="terminal-frame">
-      <div class="terminal-header">CHRONARCH AUTHORITY - TERMINAL</div>
-      <div id="terminal-content"></div>
-      <button id="close-terminal-btn" class="sys-btn">CLOSE</button>
-    </div>
-  </div>
+            <div class="nav-section-title">Classified Index</div>
+            <ul id="relic-list" class="relic-list">
+                <!-- Dynamically populated -->
+            </ul>
 
-  <div id="blocker">
-    <div id="instructions">
-      <h1 class="title-logo">CHRONARCH AUTHORITY</h1>
-      <p>Click anywhere to start</p>
-      <div class="controls-guide">
-        <p><strong>WASD</strong> : Move | <strong>SHIFT</strong> : Run | <strong>CTRL / C</strong> : Crouch</p>
-        <p><strong>E</strong> : Interact | <strong>F</strong> : Use Temporal Rod</p>
-      </div>
+            <div class="sidebar-footer">
+                <div class="site-stats">
+                    <span>Records: <strong id="stat-count">0</strong></span>
+                    <span>Sync: <strong id="stat-sync">Local</strong></span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main id="main-content">
+            <!-- Welcome / Home View -->
+            <div id="view-home" class="view active">
+                <div class="terminal-welcome">
+                    <div class="scp-logo-box">
+                        <svg viewBox="0 0 100 100" class="scp-seal">
+                            <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="4"/>
+                            <path d="M50 10 L85 85 L15 85 Z" fill="none" stroke="currentColor" stroke-width="4"/>
+                            <circle cx="50" cy="55" r="18" fill="none" stroke="currentColor" stroke-width="3"/>
+                        </svg>
+                    </div>
+                    <h2>CONTAINMENT OF RELICS ARCHIVE</h2>
+                    <p class="subtitle">Secure. Contain. Protect. Documenting anomalous artifacts across reality.</p>
+                    <div class="terminal-box">
+                        <p>> SYSTEM BOOT SEQUENCE COMPLETE.</p>
+                        <p>> WELCOME, RESEARCHER. ALL ACTIVITIES ARE MONITORED.</p>
+                        <p>> Select an item from the sidebar index or create a new file to contribute to the database.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detail / Reader View -->
+            <div id="view-detail" class="view">
+                <div class="doc-header-actions">
+                    <button id="btn-edit-doc" class="cor-btn"><i class="fa-solid fa-pen-to-square"></i> Edit Page</button>
+                    <button id="btn-back" class="cor-btn"><i class="fa-solid fa-arrow-left"></i> Return</button>
+                </div>
+                <div id="document-render-area" class="scp-document">
+                    <!-- Rendered markdown / object details -->
+                </div>
+            </div>
+
+            <!-- Editor / Creator View -->
+            <div id="view-editor" class="view">
+                <div class="editor-header">
+                    <h2 id="editor-title-heading">Create New Relic Record</h2>
+                    <div class="editor-actions">
+                        <button id="btn-save" class="cor-btn primary"><i class="fa-solid fa-floppy-disk"></i> Save Record</button>
+                        <button id="btn-cancel-edit" class="cor-btn"><i class="fa-solid fa-xmark"></i> Cancel</button>
+                    </div>
+                </div>
+
+                <div class="editor-grid">
+                    <div class="form-group">
+                        <label>Item ID / Code</label>
+                        <input type="text" id="edit-id" placeholder="e.g. COR-8921">
+                    </div>
+                    <div class="form-group">
+                        <label>Relic Name / Designation</label>
+                        <input type="text" id="edit-name" placeholder="e.g. The Infinite Metronome">
+                    </div>
+                    <div class="form-group">
+                        <label>Object Class</label>
+                        <select id="edit-class">
+                            <option value="Safe">Safe</option>
+                            <option value="Euclid">Euclid</option>
+                            <option value="Keter">Keter</option>
+                            <option value="Thaumiel">Thaumiel</option>
+                            <option value="Neutralized">Neutralized</option>
+                            <option value="Apollyon">Apollyon</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group full">
+                    <label>Image URL (Optional)</label>
+                    <input type="text" id="edit-image" placeholder="https://example.com/relic-photo.jpg">
+                </div>
+
+                <div class="editor-layout">
+                    <div class="editor-pane">
+                        <label>Markdown Content (Supports SCP format, [REDACTED], headers, etc.)</label>
+                        <textarea id="edit-content" placeholder="**Item #:** COR-XXXX..."></textarea>
+                    </div>
+                    <div class="preview-pane">
+                        <label>Live Preview</label>
+                        <div id="markdown-preview" class="scp-document preview-box"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-  </div>
-  <script type="module" src="ChronarchAuthority/src/main.js"></script>
+
+    <!-- GitHub Sync Modal -->
+    <div id="sync-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-code-commit"></i> Global GitHub Sync Setup</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>To allow pages saved by any visitor to persist globally on GitHub Pages, connect your GitHub Repository and Personal Access Token (PAT with <code>repo</code> permissions).</p>
+                <div class="form-group">
+                    <label>GitHub Username / Organization</label>
+                    <input type="text" id="gh-owner" placeholder="e.g. username">
+                </div>
+                <div class="form-group">
+                    <label>Repository Name</label>
+                    <input type="text" id="gh-repo" placeholder="e.g. cor-archive">
+                </div>
+                <div class="form-group">
+                    <label>Branch</label>
+                    <input type="text" id="gh-branch" value="main" placeholder="main">
+                </div>
+                <div class="form-group">
+                    <label>Personal Access Token (PAT)</label>
+                    <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx">
+                    <small>Stored securely in your browser's localStorage for auto-committing new files to your repo.</small>
+                </div>
+                <div class="modal-actions">
+                    <button id="btn-test-sync" class="cor-btn primary">Connect & Sync</button>
+                    <button id="btn-disable-sync" class="cor-btn danger">Disable Global Sync</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
