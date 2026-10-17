@@ -344,6 +344,17 @@ body {
     color: #900000;
 }
 
+/* Internal Links inside documents */
+.internal-link {
+    color: #0044cc;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: bold;
+}
+.internal-link:hover {
+    color: #900000;
+}
+
 /* Locked View */
 .locked-container {
     max-width: 500px;
@@ -372,12 +383,12 @@ body {
     color: var(--text-muted);
 }
 
-/* Editor */
+/* Editor Enhancements */
 .editor-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .editor-header h2 {
@@ -389,7 +400,7 @@ body {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr 1fr;
     gap: 12px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .form-group {
@@ -399,7 +410,7 @@ body {
 }
 
 .form-group.full {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 }
 
 .form-group label {
@@ -419,42 +430,100 @@ body {
     border-radius: 3px;
 }
 
+/* Advanced Editor Toolbar */
+.editor-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    padding: 6px 10px;
+    border-radius: 3px 3px 0 0;
+    border-bottom: none;
+}
+
+.toolbar-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.toolbar-btn:hover {
+    background: var(--border-color);
+    color: #fff;
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 18px;
+    background: var(--border-color);
+    margin: 0 4px;
+}
+
+.toolbar-select {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 4px 8px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    border-radius: 3px;
+}
+
 .editor-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 15px;
+    gap: 0;
     flex: 1;
+    border: 1px solid var(--border-color);
+    border-radius: 0 0 3px 3px;
 }
 
 .editor-pane {
     display: flex;
     flex-direction: column;
-    gap: 4px;
 }
 
 .editor-pane textarea {
     flex: 1;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    border: none;
     color: #fff;
-    padding: 12px;
+    padding: 15px;
     font-family: var(--font-mono);
     font-size: 0.85rem;
     resize: none;
-    border-radius: 3px;
+    line-height: 1.5;
 }
 
 .preview-pane {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    background: var(--bg-secondary);
+    border-left: 1px solid var(--border-color);
     overflow-y: auto;
+    padding: 15px;
+}
+
+.preview-header-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
 }
 
 .preview-box {
     flex: 1;
     overflow-y: auto;
     font-size: 0.9rem;
+    margin: 0 !important;
+    max-width: 100% !important;
 }
 
 /* Modal */
