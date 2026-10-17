@@ -535,3 +535,17 @@ body {
     gap: 10px;
     margin-top: 10px;
 }
+
+.redacted {
+    background-color: #000;
+    color: #000;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s, color 0.2s;
+    padding: 0 4px;
+}
+
+.redacted.revealed {
+    background-color: #e2e2dc;
+    color: #111;
+}
