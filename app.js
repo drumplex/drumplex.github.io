@@ -13,7 +13,7 @@ const DEFAULT_RELICS = [
         category: "incidents",
         objectClass: "Euclid",
         image: "",
-        content: `**Incident #:** INC-042\n\n**Date:** [REDACTED]\n\n**Description:** Security failure at Sector 4 resulted in unauthorized personnel accessing containment unit [[COR-449]]. <span class="redacted">All subjects were successfully amnesticized</span> within 3 hours.`
+        content: `**Incident #:** INC-042\n\n**Date of Incident:** [REDACTED]\n\n**Location:** Sector 4 Containment Wing\n\n**Description:** Security failure resulted in unauthorized personnel accessing [[COR-449]]. <span class="redacted">All subjects were amnesticized</span>.`
     },
     {
         id: "TGT-991",
@@ -21,7 +21,7 @@ const DEFAULT_RELICS = [
         category: "targets",
         objectClass: "Keter",
         image: "",
-        content: `**Target ID:** TGT-991\n\n**Status:** <span class="redacted">ACTIVE / UNCONTAINED</span>\n\n**Notes:** Primary entity responsible for reality-bending events in Sector 7. <span class="redacted">Do not engage without O5 authorization</span>.`
+        content: `**Target ID:** TGT-991\n\n**Threat Level:** Extreme\n\n**Known Aliases:** [REDACTED]\n\n**Primary Directive:** <span class="redacted">Terminate on sight or contain with C-Class reality anchors</span>.`
     }
 ];
 
@@ -124,15 +124,18 @@ function renderRelicList(filter = '') {
 }
 
 function parseCustomMarkdown(content) {
-    // Convert [[ID]] or [[ID|Custom Name]] into clickable internal links
+    // Parse internal archive links: [[ID]] or [[ID|Custom Name]]
     content = content.replace(/\[\[(.*?)\]\]/g, (match, p1) => {
         let parts = p1.split('|');
         let id = parts[0].trim();
         let name = parts[1] ? parts[1].trim() : id;
-        return `<span class="internal-link" onclick="viewRelic('${id}')">${escapeHtml(name)}</span>`;
+        return `<span class="internal-link" onclick="viewRelic('${id}')"><i class="fa-solid fa-file-lines"></i> ${escapeHtml(name)}</span>`;
     });
 
     let html = marked.parse(content);
+    
+    // Make external markdown links open safely in a new tab
+    html = html.replace(/<a href="/g, '<a target="_blank" rel="noopener noreferrer" href="');
     return html;
 }
 
@@ -151,7 +154,7 @@ function viewRelic(id) {
             SECURE DOCUMENT // CLEARANCE LEVEL REQUIRED
         </div>
         <h1>${escapeHtml(r.id)} - ${escapeHtml(r.name)}</h1>
-        ${r.objectClass ? `<p><strong>Object Class:</strong> <span class="class-badge">${r.objectClass}</span></p>` : ''}
+        ${r.objectClass ? `<p><strong>Object Class / Status:</strong> <span class="class-badge">${r.objectClass}</span></p>` : ''}
     `;
 
     if (r.image) {
@@ -208,7 +211,19 @@ function openEditor(id = null) {
         document.getElementById('edit-category').value = currentCategory;
         document.getElementById('edit-class').value = 'Safe';
         document.getElementById('edit-image').value = '';
-        document.getElementById('edit-content').value = `**Item #:** COR-XXXX\n\n**Object Class:** Safe\n\n**Special Containment Procedures:** ...\n\n**Description:** ...`;
+        loadCategoryTemplate(currentCategory);
+    }
+    updatePreview();
+}
+
+function loadCategoryTemplate(cat) {
+    const textarea = document.getElementById('edit-content');
+    if (cat === 'relics') {
+        textarea.value = `**Item #:** COR-XXXX\n\n**Object Class:** Safe\n\n**Special Containment Procedures:** [REDACTED]\n\n**Description:** \n\n**Addendum:** `;
+    } else if (cat === 'incidents') {
+        textarea.value = `**Incident #:** INC-XXXX\n\n**Date of Incident:** [REDACTED]\n\n**Location:** \n\n**Description:** \n\n**Aftermath & Disciplinary Action:** `;
+    } else if (cat === 'targets') {
+        textarea.value = `**Target ID:** TGT-XXXX\n\n**Threat Level:** High\n\n**Associated Assets / Relics:** \n\n**Surveillance Logs:** \n\n**Direct Orders:** <span class="redacted">Do not approach without backup</span>.`;
     }
     updatePreview();
 }
@@ -232,6 +247,12 @@ function populateLinkDropdown() {
 function setupEventListeners() {
     document.querySelectorAll('.cat-tab').forEach(tab => {
         tab.addEventListener('click', () => switchCategory(tab.getAttribute('data-cat')));
+    });
+
+    document.getElementById('edit-category').addEventListener('change', (e) => {
+        if (!currentEditingId) {
+            loadCategoryTemplate(e.target.value);
+        }
     });
 
     document.getElementById('btn-unlock-targets').addEventListener('click', () => {
@@ -272,6 +293,14 @@ function setupEventListeners() {
     document.getElementById('tb-italic').addEventListener('click', () => insertAtCursor('*', '*'));
     document.getElementById('tb-h2').addEventListener('click', () => insertAtCursor('## '));
     document.getElementById('tb-quote').addEventListener('click', () => insertAtCursor('> '));
+    
+    document.getElementById('tb-weblink').addEventListener('click', () => {
+        let url = prompt("Enter Web URL (e.g., https://google.com):", "https://");
+        let title = prompt("Enter Link Display Text:", "External Reference");
+        if (url && title) {
+            insertAtCursor(`[${title}](${url})`);
+        }
+    });
 
     document.getElementById('tb-link-select').addEventListener('change', (e) => {
         const val = e.target.value;
@@ -281,8 +310,7 @@ function setupEventListeners() {
     });
 
     document.getElementById('tb-template').addEventListener('click', () => {
-        textarea.value = `**Item #:** COR-XXXX\n\n**Object Class:** Euclid\n\n**Special Containment Procedures:** [REDACTED]\n\n**Description:** \n\n**Addendum 1.1:** [DATA EXPUNGED]`;
-        updatePreview();
+        loadCategoryTemplate(document.getElementById('edit-category').value);
     });
 
     document.getElementById('btn-save').addEventListener('click', async () => {
