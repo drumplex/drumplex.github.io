@@ -1,5 +1,13 @@
 [
   {
+    "id": "FI-6255",
+    "name": "Relic Stealer",
+    "category": "incidents",
+    "objectClass": "Keter",
+    "image": "blob:https://chatgpt.com/364d8924-2908-4fd2-9233-5de582c84c5c",
+    "content": "**Incident #:** INC-1134\n\n**Date of Incident:** October <span class=\"redacted\">28</span>, <span class=\"redacted\">2020</span>\n\n**Location:** COR-003 CONTAIMENT\n\n**Description:** On October <span class=\"redacted\">28</span>, <span class=\"redacted\">2020</span>, a man in a black robe with a white mask entered the relic containment chamber for COR-003. Upon entering COR-003's containment chamber, he took it, before speaking in an unintelligible language, which was caught by the facilities auto-transcriptors.\n\n**Aftermath & Disciplinary Action:** After the incident, we interviewed multiple people, but we got no leads, other than an image captured by the vent cameras. "
+  },
+  {
     "id": "COR-003",
     "name": "The Glowing Mask",
     "objectClass": "Euclid",
